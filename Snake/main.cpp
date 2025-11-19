@@ -9,6 +9,7 @@
 #include "board.h"
 #include "snake.h"
 #include "food.h"
+#include "fixq.h"
 
 double LastUpdateTime{};
 
@@ -137,6 +138,7 @@ std::string GetFormattedTime(uint64_t ms)
 
     return std::format("{:02}:{:02}:{:02}.{:03}", hours, minutes, seconds, millis);
 }
+
 int main()
 {
     const int32_t GridWidth = 600;
@@ -149,7 +151,9 @@ int main()
 
     std::chrono::steady_clock::time_point start;
     std::chrono::steady_clock::time_point end;
-    std::deque<std::string> lapTimes;
+    //std::deque<std::string> lapTimes;
+    FixQ<std::string, 6> lapTimes;
+    std::string formattedTime;
 
     InitWindow(width, height, "Snake Game");
 
@@ -163,7 +167,7 @@ int main()
 
     auto food = std::make_shared<Food>(Rows, Cols);
     food->Print();
-    int32_t flash{};
+    //int32_t flash{};
 
     start = std::chrono::steady_clock::now();
     auto gameStart = std::chrono::high_resolution_clock::now();
@@ -209,10 +213,11 @@ int main()
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
                 std::cout << "Elapsed: " << elapsed.count() << " ms\n";
                 int32_t idx = snake->Len() - 2;
-                if(snake->Len() > 11) {
-                    lapTimes.pop_back();
-                }    
-                lapTimes.push_front(std::format("LAP-{:02}: {}", idx+1, GetFormattedTime(elapsed.count())));
+                //if(snake->Len() > 11) {
+                //    //lapTimes.pop_back();
+                //    lapTimes.Push()
+                //}    
+                lapTimes.Push(std::format("LAP-{:02}: {}", idx+1, GetFormattedTime(elapsed.count())));
 
                 while(true) {
                     auto v = Vec::RandomVec(0, 19);
@@ -243,12 +248,13 @@ int main()
                 board->Print();
                 printBoard = false;
             }
+            loopTime = std::chrono::high_resolution_clock::now();
+            auto dur = std::chrono::duration_cast<std::chrono::milliseconds>( loopTime - gameStart );
+            formattedTime = GetFormattedTime( dur.count() );
         }
 
-        loopTime = std::chrono::high_resolution_clock::now();
-        auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(loopTime - gameStart);
-        auto formattedTime = GetFormattedTime(dur.count());
-        DrawText(formattedTime.c_str(), 620, 10, 16, WHITE);
+
+        DrawTextEx( font, formattedTime.c_str(), { 620, 10 }, 16, 1, WHITE );
 
         int32_t i{1};
         for(const auto& lap : lapTimes) {
