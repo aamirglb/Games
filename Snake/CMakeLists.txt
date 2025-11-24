@@ -5,13 +5,13 @@ project(SnakeGame VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Specify the GDAL installation directory
+# Specify the raylib installation directory
 set(RAYLIB_DIR "C:/sw/raylib/build-msvc/raylib")
 
-# Include GDAL headers
+# Include raylib headers
 include_directories("${RAYLIB_DIR}/include")
 
-# Link GDAL libraries
+# Link raylib libraries
 link_directories("${RAYLIB_DIR}/Debug")
 
 set(SOURCES
