@@ -159,7 +159,8 @@ int main()
 
     SetTargetFPS(frameRate);
 
-    Font font = LoadFontEx("font/monogram.ttf", 64, 0, 0);
+    // Font font = LoadFontEx("font/monogram.ttf", 64, 0, 0);
+    Font font = LoadFontEx("font/tuffy.ttf", 64, 0, 0);
 
     std::unique_ptr<Board> board = std::make_unique<Board>(Rows, Cols, CellSize);
     auto snake = std::make_shared<Snake>(Rows, Cols, CellSize);
@@ -260,7 +261,7 @@ int main()
         for(const auto& lap : lapTimes) {
             if(!lap.empty()) {
                 Vector2 v{620, 10+(i*24)};
-                DrawTextEx(font, lap.c_str(), v, 14, 1, WHITE);
+                DrawTextEx(font, lap.c_str(), v, 16, 2, WHITE);
             }
             ++i;
         }
